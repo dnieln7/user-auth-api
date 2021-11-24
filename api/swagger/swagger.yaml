@@ -331,9 +331,7 @@ definitions:
     properties:
       successful:
         type: boolean
-      message:
-        type: string
-      result:
+      created:
         $ref: '#/definitions/Report'
 
   ReportsResponse:
@@ -357,7 +355,7 @@ definitions:
         type: string
     required:
       - email
-      - passwod
+      - password
       - role
 
   User:

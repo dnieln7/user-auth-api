@@ -5,29 +5,46 @@ function applyHeaders(res) {
     res.header('Access-Control-Allow-Headers', 'Content-Type');
 }
 
-function getLoginResponse(token) {
+function loginResponse(token) {
     return {
         token: token
     }
 }
 
-function getUserResponse(successful, user) {
+function userResponse(successful, user) {
     return {
         successful: successful,
         user: user
     }
 }
 
-function getErrorResponse(message, description) {
+function errorResponse(message, description) {
     return {
         message: message,
         description: description
     }
 }
 
+function reportResponse(successful, created) {
+    return {
+        successful: successful,
+        created: created
+    }
+}
+
+function deleteResponse(successful, message, id) {
+    return {
+        successful: successful,
+        message: message,
+        id: id
+    }
+}
+
 module.exports = {
-    getLoginResponse,
-    getUserResponse,
-    getErrorResponse,
+    loginResponse,
+    userResponse,
+    errorResponse,
+    reportResponse,
+    deleteResponse,
     applyHeaders
 }

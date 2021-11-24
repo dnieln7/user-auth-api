@@ -5,7 +5,7 @@ require('dotenv').config({
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const {tb_users} = require("../models");
-const {getErrorResponse, getLoginResponse, getUserResponse} = require("../helpers/utils");
+const {errorResponse, loginResponse, userResponse} = require("../helpers/utils");
 const {applyHeaders} = require("../helpers/utils");
 
 function login(req, res) {
@@ -15,7 +15,7 @@ function login(req, res) {
     tb_users.findOne({where: {email: authentication.email}})
         .then(user => {
             if (!user) {
-                return res.status(404).send(getErrorResponse(
+                return res.status(404).send(errorResponse(
                     "User not found",
                     "Provided email doesn't exists"
                 ));
@@ -24,7 +24,7 @@ function login(req, res) {
             if (type === 'E') {
                 bcrypt.compare(authentication.password, user.password, (error, matches) => {
                     if (!matches) {
-                        return res.status(401).send(getErrorResponse("Invalid Password", error.toString()));
+                        return res.status(401).send(errorResponse("Invalid Password", error.toString()));
                     }
 
                     const token = jwt.sign(
@@ -40,12 +40,12 @@ function login(req, res) {
                         },
                     );
 
-                    return res.status(200).send(getLoginResponse(token));
+                    return res.status(200).send(loginResponse(token));
                 });
             } else {
                 // TODO process for google login
             }
-        }).catch(reason => res.status(500).send(getErrorResponse("Unknown error", reason.toString())))
+        }).catch(reason => res.status(500).send(errorResponse("Unknown error", reason.toString())))
 }
 
 function register(req, res) {
@@ -56,15 +56,15 @@ function register(req, res) {
 
     bcrypt.genSalt(10, (error, salt) => {
         if (error) {
-            return res.status(500).send(getErrorResponse("Unknown error", error.toString()));
+            return res.status(500).send(errorResponse("Unknown error", error.toString()));
         }
 
         return bcrypt.hash(password, salt, (error, hash) => {
             user.password = hash;
 
             tb_users.create(user)
-                .then(result => res.status(201).send(getUserResponse(true, result)))
-                .catch(reason => res.status(500).send(getErrorResponse("Unknown error", reason)));
+                .then(result => res.status(201).send(userResponse(true, result)))
+                .catch(reason => res.status(500).send(errorResponse("Unknown error", reason)));
         })
     })
 }
@@ -98,7 +98,7 @@ function verifyToken(req, authOrSecDef, header, callback) {
 }
 
 function sendAuthError(req) {
-    return req.res.status(403).send(getErrorResponse("Access Denied", "You are not authorized to see this content"));
+    return req.res.status(403).send(errorResponse("Access Denied", "You are not authorized to see this content"));
 }
 
 module.exports = {
