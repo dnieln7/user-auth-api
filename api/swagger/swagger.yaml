@@ -99,6 +99,28 @@ paths:
           description: Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+            
+  /sign-up-google:
+    x-swagger-router-controller: auth.controller
+
+    post:
+      operationId: registerGoogle
+      description: Create a new user with google
+      parameters:
+        - name: user
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/UserResponse'
+        '500':
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
 
   /user/{id}:
     x-swagger-router-controller: user.controller
@@ -348,7 +370,6 @@ definitions:
     properties:
       email:
         type: string
-        pattern: '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
       password:
         type: string
       role:
@@ -369,7 +390,6 @@ definitions:
         maxLength: 1
       email:
         type: string
-        pattern: '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'
       google_id:
         type: string
       password:

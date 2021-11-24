@@ -66,3 +66,11 @@ function deleteReport(req, res) {
             .catch(reason => res.status(500).send(errorResponse("There was an error", reason.toString())));
     }).catch(reason => res.status(500).send(errorResponse("There was an error", reason.toString())));
 }
+
+module.exports = {
+    getReports,
+    postReport,
+    getReportById,
+    putReport,
+    deleteReport
+}

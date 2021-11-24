@@ -8,22 +8,41 @@ const {Sequelize} = require('sequelize');
 
 const basename = path.basename(__filename);
 const database = {};
-const sequelize = new Sequelize(
-    process.env.DB_DATABASE,
-    process.env.DB_USERNAME,
-    process.env.DB_PASSWORD,
-    {
-        port: process.env.DB_PORT,
-        host: process.env.DB_HOST,
-        dialect: 'postgres',
-        dialectOptions: {
-            ssl: {
-                require: true,
-                rejectUnauthorized: false
+const sequelize = getSequelize();
+
+function getSequelize() {
+    const env = process.env.SEQUELIZE_ENV || "development"
+
+    if (env === "development") {
+        return new Sequelize(
+            process.env.DB_DATABASE,
+            process.env.DB_USERNAME,
+            process.env.DB_PASSWORD,
+            {
+                port: process.env.DB_PORT,
+                host: process.env.DB_HOST,
+                dialect: 'postgres'
             }
-        }
+        );
+    } else {
+        new Sequelize(
+            process.env.DB_DATABASE,
+            process.env.DB_USERNAME,
+            process.env.DB_PASSWORD,
+            {
+                port: process.env.DB_PORT,
+                host: process.env.DB_HOST,
+                dialect: 'postgres',
+                dialectOptions: {
+                    ssl: {
+                        require: true,
+                        rejectUnauthorized: false
+                    }
+                }
+            }
+        );
     }
-);
+}
 
 async function connect() {
     try {

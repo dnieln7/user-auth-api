@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         resolved: DataTypes.BOOLEAN,
     }, {});
     Report.associate = function (models) {
-        Report.belongsTo(models.User, {foreignKey: 'creator_id', as: 'creator'})
+        Report.belongsTo(models.tb_users, {foreignKey: 'creator_id', as: 'creator'})
     };
-    return User;
+    return Report;
 };

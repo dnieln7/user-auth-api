@@ -27,23 +27,16 @@ function login(req, res) {
                         return res.status(401).send(errorResponse("Invalid Password", error.toString()));
                     }
 
-                    const token = jwt.sign(
-                        {
-                            sub: user.id,
-                            email: user.email,
-                            role: user.role,
-                            issuer: process.env.ISSUER
-                        },
-                        process.env.TOKEN_SECRET,
-                        {
-                            /*expiresIn: "1hr"*/
-                        },
-                    );
-
-                    return res.status(200).send(loginResponse(token));
+                    return res.status(200).send(loginResponse(createToken(user)));
                 });
             } else {
-                // TODO process for google login
+                bcrypt.compare(authentication.password, user.google_id, (error, matches) => {
+                    if (!matches) {
+                        return res.status(401).send(errorResponse("Invalid Google ID", error.toString()));
+                    }
+
+                    return res.status(200).send(loginResponse(createToken(user)));
+                });
             }
         }).catch(reason => res.status(500).send(errorResponse("Unknown error", reason.toString())))
 }
@@ -66,7 +59,29 @@ function register(req, res) {
                 .then(result => res.status(201).send(userResponse(true, result)))
                 .catch(reason => res.status(500).send(errorResponse("Unknown error", reason)));
         })
-    })
+    });
+}
+
+function registerGoogle(req, res) {
+    applyHeaders(res);
+
+    const user = req.body;
+    let googleId = user.google_id
+
+    bcrypt.genSalt(10, (error, salt) => {
+        if (error) {
+            return res.status(500).send(errorResponse("Unknown error", error.toString()));
+        }
+
+        return bcrypt.hash(googleId, salt, (error, hash) => {
+            user.google_id = hash;
+            user.password = ""
+
+            tb_users.create(user)
+                .then(result => res.status(201).send(userResponse(true, result)))
+                .catch(reason => res.status(500).send(errorResponse("Unknown error", reason)));
+        })
+    });
 }
 
 function verifyToken(req, authOrSecDef, header, callback) {
@@ -97,6 +112,21 @@ function verifyToken(req, authOrSecDef, header, callback) {
     }
 }
 
+function createToken(user) {
+    return jwt.sign(
+        {
+            sub: user.id,
+            email: user.email,
+            role: user.role,
+            issuer: process.env.ISSUER
+        },
+        process.env.TOKEN_SECRET,
+        {
+            /*expiresIn: "1hr"*/
+        },
+    );
+}
+
 function sendAuthError(req) {
     return req.res.status(403).send(errorResponse("Access Denied", "You are not authorized to see this content"));
 }
@@ -104,5 +134,6 @@ function sendAuthError(req) {
 module.exports = {
     login,
     register,
+    registerGoogle,
     verifyToken
 };
