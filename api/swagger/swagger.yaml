@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
-  version: '1.0.0'
-  title: road-watchman
+  version: '2.0.0'
+  title: road-watchman-api-2
 
 host: localhost:10010
 
