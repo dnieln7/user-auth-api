@@ -176,7 +176,7 @@ paths:
           schema:
             $ref: '#/definitions/ErrorResponse'
 
-  /reports:
+  /reports/user/{id}:
     x-swagger-router-controller: report.controller
 
     get:
@@ -187,6 +187,11 @@ paths:
       x-security-scopes:
         - admin
         - user
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
       responses:
         '200':
           description: success
@@ -196,6 +201,9 @@ paths:
           description: Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+            
+  /reports:
+    x-swagger-router-controller: report.controller
 
     post:
       operationId: postReport
@@ -252,7 +260,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
 
     put:
-      operationId: putReport
+      operationId: updateReport
       description: Update report information
       security:
         - Bearer: [ ]

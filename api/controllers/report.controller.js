@@ -5,7 +5,9 @@ const {applyHeaders} = require("../helpers/utils");
 function getReports(req, res) {
     applyHeaders(res);
 
-    tb_reports.findAll()
+    const creatorId = req.swagger.params.id.value;
+
+    tb_reports.findAll({where: {creator_id: creatorId}})
         .then(result => res.status(200).send(result))
         .catch(reason => res.status(500).send(errorResponse("There was an error", reason.toString())));
 }
@@ -34,7 +36,7 @@ function getReportById(req, res) {
     }).catch(reason => res.status(500).send(errorResponse("There was an error", reason.toString())));
 }
 
-function putReport(req, res) {
+function updateReport(req, res) {
     applyHeaders(res);
 
     const id = req.swagger.params.id.value;
@@ -71,6 +73,6 @@ module.exports = {
     getReports,
     postReport,
     getReportById,
-    putReport,
+    updateReport,
     deleteReport
 }
