@@ -99,7 +99,7 @@ paths:
           description: Error
           schema:
             $ref: '#/definitions/ErrorResponse'
-            
+
   /sign-up-google:
     x-swagger-router-controller: auth.controller
 
@@ -201,7 +201,7 @@ paths:
           description: Error
           schema:
             $ref: '#/definitions/ErrorResponse'
-            
+
   /reports:
     x-swagger-router-controller: report.controller
 

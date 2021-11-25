@@ -1,5 +1,5 @@
 const {tb_users} = require("../models");
-const {errorResponse,userResponse, deleteResponse} = require("../helpers/utils");
+const {errorResponse, userResponse, deleteResponse} = require("../helpers/utils");
 const {applyHeaders} = require("../helpers/utils");
 
 function updateUser(req, res) {
