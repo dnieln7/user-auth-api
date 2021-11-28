@@ -25,13 +25,6 @@ function errorResponse(message, description) {
     }
 }
 
-function reportResponse(successful, created) {
-    return {
-        successful: successful,
-        created: created
-    }
-}
-
 function deleteResponse(successful, message, id) {
     return {
         successful: successful,
@@ -44,7 +37,6 @@ module.exports = {
     loginResponse,
     userResponse,
     errorResponse,
-    reportResponse,
     deleteResponse,
     applyHeaders
 }

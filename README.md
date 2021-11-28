@@ -1,6 +1,6 @@
-# Road watchman 2 API
+# User Auth Api
 
-Backend for Road watchman app
+Basic user authentication backend
 
 ## Start 🚀
 
