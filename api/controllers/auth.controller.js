@@ -32,7 +32,7 @@ function login(req, res) {
             } else {
                 bcrypt.compare(authentication.password, user.google_id, (error, matches) => {
                     if (!matches) {
-                        return res.status(401).send(errorResponse("Invalid Google ID", error.toString()));
+                        return res.status(401).send(errorResponse("Invalid Google ID", error));
                     }
 
                     return res.status(200).send(loginResponse(createToken(user)));
